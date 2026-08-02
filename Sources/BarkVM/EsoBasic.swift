@@ -1,7 +1,7 @@
 import Foundation
 
-struct EsoBasicParser {
-    let tokens: [Token]
+struct EsoBasicParser: LanguageParser {
+        let tokens: [Token]
     var position = 0
     
     var current: Token {
@@ -12,14 +12,28 @@ struct EsoBasicParser {
         self.tokens = tokens
     }
     
-    mutating func program() throws -> [Statement] {
-        try parseStatements(until: [])
+    public mutating func program() throws -> [Statement] {
+        try parse(until: [])
     }
     
-    mutating func parseStatements(until terminators: Set<Keyword>) throws -> [Statement] {
+    mutating func parse(until terminators: Set<Keyword>) throws -> [Statement] {
         var statements: [Statement] = []
         
         return statements
     }
     
+    
 }
+
+/* public struct EsoBasic: LanguageFrontend {
+
+    public init() {}
+    
+    public func parse(_ source: String) throws -> [Statement] {
+        let tokens = try EsoBasicLexer().tokens(from: source)
+        let parser = EsoBasic()
+        
+        return try parser.
+    }
+    
+} */

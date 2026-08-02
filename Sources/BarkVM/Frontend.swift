@@ -1,20 +1,12 @@
 import Foundation
 
-public protocol LanguageFrontend {
-    func parseProgram(_ source: String) throws -> [Statement]
+public protocol LanguageParser {
+    mutating func program() throws -> [Statement]
+    
+    mutating func parse(until terminators: Set<Keyword>) throws -> [Statement]
 }
 
-// TODO: EsoBasic still needs fleshing out
-/*
-public struct EsoBasic: LanguageFrontend {
-   
-    public init() {}
-    
-  public func parseProgram(_ source: String) throws -> [Statement] {
-        let tokens = try EsoBasicLexer().tokens(from: source)
-        let parser = EsoBasic()
-        
-        return try parser.program()
-    }
+
+public protocol LanguageFrontend {
+    func parse(_ source: String) throws -> [Statement]
 }
- */

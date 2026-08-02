@@ -1,6 +1,6 @@
 import Foundation
 
-enum Keyword: String {
+public enum Keyword: String {
     case estu // let
     case montru // show (i.e. print)
     case se // if

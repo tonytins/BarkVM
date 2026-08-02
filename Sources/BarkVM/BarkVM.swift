@@ -8,6 +8,7 @@ import ArgumentParser
 
 @main
 struct BarkVM: ParsableCommand {
+    
     mutating func run() throws {
         print("Hello, world!")
     }

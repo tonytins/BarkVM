@@ -4,7 +4,7 @@ private extension Array {
     }
 }
 
-private func normalizedLineEndings(in source: String) -> String {
+func normalizedLineEndings(in source: String) -> String {
     source.replacingOccurrences(of: "\r\n", with: "\n")
         .replacingOccurrences(of: "\r", with: "\n")
 }
