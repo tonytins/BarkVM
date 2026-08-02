@@ -43,7 +43,7 @@ enum LexingError: Error, CustomStringConvertible {
 }
 
 
-struct EsperantoLexer {
+struct EsoBasicLexer {
     private static let remarkKeyword = "rimarko"
     
     func tokens(from source: String) throws -> [Token] {
@@ -98,7 +98,7 @@ struct EsperantoLexer {
         
         while index < characters.count {
             if startLineComment(characters, at: index) {
-                // end of line function
+                index = endOfLine(characters, from: index)
                 continue
             }
             result.append(characters[index])
@@ -106,5 +106,14 @@ struct EsperantoLexer {
         }
         
         return ""
+    }
+    
+    func endOfLine(_ characters: [Character],
+                       from start: Int)  -> Int {
+        var index = start
+        while index < characters.count, characters[index] != "\n" {
+            index += 1
+        }
+        return index
     }
 }
