@@ -66,5 +66,28 @@ extension SyntaxExpression: Codable {
                 .dataCorruptedError(in: container, debugDescription: "Unknown expression tag '\(tag)'")
         }
     }
-    
+}
+
+extension Statement: Codable {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.unkeyedContainer()
+        switch self {
+        case .assignment(let name, let value):
+            try container.encode("set")
+            try container.encode(name)
+            try container.encode(value)
+        case .print(let value):
+            try container.encode("print")
+            try container.encode(value)
+        case .conditional(let condition, let thenBranch, let elseBranch):
+            try container.encode("if")
+            try container.encode(condition)
+            try container.encode(thenBranch)
+            try container.encode(elseBranch)
+        case .whileLoop(let condition, let body):
+            try container.encode("while")
+            try container.encode(condition)
+            try container.encode(body)
+        }
+    }
 }
