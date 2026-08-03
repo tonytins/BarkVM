@@ -19,6 +19,20 @@ public indirect enum Statement {
     case whileLoop(condition: SyntaxExpression, body: [Statement])
 }
 
+public enum Opcode: String, Codable {
+    case declare = "let"
+    case delcareMut = "mut"
+    case mutable = "-"
+    case print
+    case conditional = "if"
+    case whileLoop = "while"
+    
+    case numberLiteral = "const"
+    case boolean = "bool"
+    case variable = "val"
+    case negate = "neg"
+}
+
 extension SyntaxExpression: Codable {
     
     static let binaryOperators: Set<String> = ["+", "-", "*", "/", "%", "==", "!=", "<", ">", "<=", ">="]
@@ -27,20 +41,20 @@ extension SyntaxExpression: Codable {
         var container = encoder.unkeyedContainer()
         switch self {
         case .numberLiteral(let value):
-            try container.encode("num")
+            try container.encode(Opcode.numberLiteral)
             try container.encode(value)
         case .truthLiteral(let value):
-            try container.encode("truth")
+            try container.encode(Opcode.boolean)
             try container.encode(value)
         case .variable(let name):
-            try container.encode("var")
+            try container.encode(Opcode.variable)
             try container.encode(name)
         case .binary(let op, let left, let right):
             try container.encode(op)
             try container.encode(left)
             try container.encode(right)
         case .unaryNegation(let operand):
-            try container.encode("neg")
+            try container.encode(Opcode.negate)
             try container.encode(operand)
         }
     }
@@ -48,14 +62,14 @@ extension SyntaxExpression: Codable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let tag = try container.decode(String.self)
-        switch tag {
-        case "num":
+        switch Opcode(rawValue: tag) {
+        case .numberLiteral:
             self = .numberLiteral(try container.decode(Double.self))
-        case "truth":
+        case .boolean:
             self = .truthLiteral(try container.decode(TruthValue.self))
-        case "var":
+        case .variable:
             self = .variable(try container.decode(String.self))
-        case "neg":
+        case .negate:
             self = .unaryNegation(try container.decode(SyntaxExpression.self))
         case _ where Self.binaryOperators.contains(tag):
             let left = try container.decode(SyntaxExpression.self)
@@ -73,21 +87,35 @@ extension Statement: Codable {
         var container = encoder.unkeyedContainer()
         switch self {
         case .assignment(let name, let value):
-            try container.encode("set")
+            try container.encode(Opcode.declare)
             try container.encode(name)
             try container.encode(value)
         case .print(let value):
-            try container.encode("print")
+            try container.encode(Opcode.delcareMut)
             try container.encode(value)
         case .conditional(let condition, let thenBranch, let elseBranch):
-            try container.encode("if")
+            try container.encode(Opcode.mutable)
             try container.encode(condition)
             try container.encode(thenBranch)
             try container.encode(elseBranch)
         case .whileLoop(let condition, let body):
-            try container.encode("while")
+            try container.encode(Opcode.whileLoop)
             try container.encode(condition)
             try container.encode(body)
+        }
+    }
+    
+    public init(from decoder: Decoder) throws {
+        var container = try decoder.unkeyedContainer()
+        let tag = try container.decode(String.self)
+        switch Opcode(rawValue: tag) {
+        case .declare:
+            let name = try container.decode(String.self)
+            let value = try container.decode(SyntaxExpression.self)
+            self = .assignment(name: name, value: value)
+        default:
+            throw DecodingError
+                .dataCorruptedError(in: container, debugDescription: "Unknown expression tag '\(tag)'")
         }
     }
 }

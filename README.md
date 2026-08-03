@@ -1,6 +1,5 @@
-# BarkVM
+# 🦊 BarkVM
 
-<!--
 ## ✅ Minimum Requirements
 
 ### Development
@@ -9,14 +8,14 @@
 
 ### Deployment
 
-| Target  | Version | 
-| ------- | ------- | 
-| macOS   | 10.13   | 
-| Windows | 10      | 
-| Ubuntu  | 20.04   | 
-| Debian  | 12      | 
-| Fedora  | 39      | 
-
+| Target  | Version |     |
+| ------- | ------- | --- |
+| macOS   | 10.13   |     |
+| Windows | 10      |     |
+| Ubuntu  | 20.04   |     |
+| Debian  | 12      |     |
+| Fedora  | 39      |     |
+<!--
 ## 🚀 Usage
 
 ### Basic Usage
@@ -30,11 +29,11 @@ Tincidunt! rationibus autem ea Lorem mei, qui! nominati. Amet, possit autem dele
 | `--help` | `-h`  | Display available options |
 -->
 
-## Background
+## 🔍 Background
 
-I've written plenty of parsers and wanted to make yet another toy programming languages. I settled on Minimal BASIC dialect will use Esperanto so I could learn it. 
+I've written *plenty* of parsers and attempted some Interpreted programming languages based around that and I wanted to try something new. I settled on Minimal BASIC dialect that used Esperanto for the keywords so I could learn it. But I wanted to go beyond just the parser. 
 
-But… I wanted to try something a little different. I've always just written a straight lexer and parser (which is fine) but what about an AST and why not an IR? Never really considered an IR until I've watched a [beautiful video](https://youtu.be/lflRnEfZgYQ) on the subject. That got me thinking, could I use JSON as one? So that's basically the second goal.
+Then I stumbled upon this [beautiful video](https://youtu.be/lflRnEfZgYQ) about compiler IR (intermediate representation) and wondered, "what if I add a JSON as an IR into the mix?"
 
 ## ⚖️ License
 

@@ -3,8 +3,3 @@ private extension Array {
         indices.contains(index) ? self[index] : nil
     }
 }
-
-func normalizedLineEndings(in source: String) -> String {
-    source.replacingOccurrences(of: "\r\n", with: "\n")
-        .replacingOccurrences(of: "\r", with: "\n")
-}

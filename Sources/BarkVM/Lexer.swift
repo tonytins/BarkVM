@@ -1,7 +1,8 @@
 import Foundation
 
 public enum Keyword: String {
-    case estu // let
+    case valoro // let
+    case mut // mutable
     case montru // show (i.e. print)
     case se // if
     case tiam // then
@@ -68,12 +69,6 @@ struct EsoBasicLexer {
         return tokens
     }
     
-    private func normalizedLineEndings(in source: String) -> String {
-        source
-            .replacingOccurrences(of: "\r\n", with: "\n")
-            .replacingOccurrences(of: "\r", with: "\n")
-    }
-    
     func startLineComment(_ characters: [Character], at index: Int) -> Bool {
         if characters[index] == "#" { return true }
         return matchesStandaloneWord(
@@ -88,6 +83,10 @@ struct EsoBasicLexer {
         return true
     }
     
+    func normalizedLineEndings(in source: String) -> String {
+        source.replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+    }
     
     func sanitized(_ source: String) -> String {
         let normalized = normalizedLineEndings(in: source)
