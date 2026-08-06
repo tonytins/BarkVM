@@ -18,6 +18,37 @@ extension Value: CustomStringConvertible {
 
 extension Value: Equatable { }
 
+private struct ReturnSignal: Error {
+    let value: Value
+}
+
+final class Environment {
+    private struct Binding {
+        var value: Value
+        let isMutable: Bool
+    }
+    
+    private var scopes:  [[String: Binding]] = [[:]]
+    
+    private var root: Environment? = nil
+    
+    init() {
+        root = nil
+    }
+    
+    private init(root: Environment) {
+        self.root = root
+    }
+    
+    private var effectiveRoot: Environment {
+        root ?? self
+    }
+    
+    func pushScope() {
+        scopes.append([:])
+    }
+}
+
 enum InterpreterError: Error, CustomStringConvertible {
     case undefinedVariable(String)
     case undefinedFunction(String)
