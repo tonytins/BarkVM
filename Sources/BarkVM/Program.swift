@@ -11,6 +11,8 @@ struct Program: ParsableCommand {
     
     @Argument var source: String
     
+    @Flag var Ir = false
+    
     mutating func run() throws {
         print("Hello, world!")
     }
