@@ -37,4 +37,4 @@ Then I stumbled upon this [beautiful video](https://youtu.be/lflRnEfZgYQ) about 
 
 ## ⚖️ License
 
-I license this project under the GPL-3.0 license - see [LICENSE](LICENSE) for details.
+I license this project under the MPL-2.0 license - see [LICENSE](LICENSE) for details.
