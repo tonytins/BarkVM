@@ -1,7 +1,13 @@
+public enum BarkString {
+    case text(String)
+    case empty
+}
+
 public enum TruthValue: String, Codable, Equatable, Sendable {
     case isTrue = "true"
     case isFalse = "false"
     case isUnknown = "none"
+    // case text(BarkString)
 }
 
 public indirect enum SyntaxExpression {

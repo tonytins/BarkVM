@@ -1,33 +1,36 @@
 # 🦊 BarkVM
 
-## ✅ Minimum Requirements
-
-### Development
-
-- Swift 6.3+
-
-### Deployment
-
-| Target  | Version |
-| ------- | ------- |
-| macOS   | 10.13   |
-| Windows | 10      |
-| Ubuntu  | 20.04   |
-| Debian  | 12      |
-| Fedora  | 39      |
 <!--
+## 📦 Installation
+
+```swift
+let package = Package(
+    // name, platforms, products, etc.
+    dependencies: [
+        // other dependencies
+        .package(url: "<git address>", branch: "<branch>"),
+    ],
+    targets: [
+        .executableTarget(name: "<your-game>", dependencies: [
+            // other dependencies
+            .product(name: "<package name>", package: "<github name>"),
+        ]),
+        // other targets
+    ]
+)
+```
+
+Or in Xcode: File -> Add Package Dependencies, then paste the repo URL.
+
+
 ## 🚀 Usage
-
-### Basic Usage
-
-Tincidunt! rationibus autem ea Lorem mei, qui! nominati. Amet, possit autem deleniti Vis at at rationibus. Choro qui! copiosae at qui! vidisse has choro.
-
-### Command Line Options
-
-| Option   | Short | Description               |
-| -------- | ----- | ------------------------- |
-| `--help` | `-h`  | Display available options |
 -->
+
+### ✅ Supported Versions
+
+| act2    | Minimum Swift Version |
+| ------- | --------------------- |
+| ``main`` | 6.3                   |
 
 ## 🔍 Background
 

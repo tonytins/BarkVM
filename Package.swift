@@ -6,19 +6,17 @@ import PackageDescription
 let package = Package(
     name: "BarkVM",
     products: [
-        .library(name: "BarkVM", targets: ["BarkVM"]),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
+        // Products define the executables and libraries a package produces, making them visible to other packages.
+        .library(
+            name: "BarkVM",
+            targets: ["BarkVM"],
+        ),
     ],
     targets: [
-        .target(name: "BarkVM"),
-        .executableTarget(
-            name: "Compiler",
-            dependencies: [
-                "BarkVM",
-                .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            ],
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
+        .target(
+            name: "BarkVM",
         ),
         .testTarget(
             name: "BarkVMTests",

@@ -1,7 +1,7 @@
 import Foundation
 
 
-protocol LanguageFrontend {
+public protocol LanguageFrontend {
     func parseProgram(_ source: String) throws -> [Statement]
 }
 
@@ -43,5 +43,11 @@ public enum StringScanning {
         }
         
         throw StringScanningError.unterminatedString(at: startIndex)
+    }
+}
+
+public extension Array {
+    subscript(safe index: Int) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }
