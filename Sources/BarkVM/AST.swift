@@ -1,7 +1,7 @@
-public enum TruthValue: String, Codable, Equatable {
+public enum TruthValue: String, Codable, Equatable, Sendable {
     case isTrue = "true"
     case isFalse = "false"
-    case isUnknown = "unknown"
+    case isUnknown = "none"
 }
 
 public indirect enum SyntaxExpression {
@@ -16,7 +16,7 @@ public indirect enum SyntaxExpression {
 public struct SwitchCase {
     public let value: SyntaxExpression
     public let body: [Statement]
-    
+
     public init(value: SyntaxExpression, body: [Statement]) {
         self.value = value
         self.body = body
@@ -43,7 +43,7 @@ public enum Opcode: String, Codable {
     case declare = "let"
     case declareMutable = "mut"
     case mutate = "="
-    case print = "print"
+    case print
     case conditional = "if"
     case whileLoop = "while"
     case switchStatement = "match"
@@ -54,53 +54,52 @@ public enum Opcode: String, Codable {
     case call = "invoke"
     case returnStatement = "return"
     case expressionStatement = "drop"
-    
+
     case numberLiteral = "num"
     case boolean = "bool"
     case variable = "val"
     case negate = "neg"
-    }
-
+}
 
 extension SyntaxExpression: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         switch self {
-        case .numberLiteral(let value):
+        case let .numberLiteral(value):
             try container.encode(Opcode.numberLiteral)
             try container.encode(value)
-        case .boolean(let value):
+        case let .boolean(value):
             try container.encode(Opcode.boolean)
             try container.encode(value)
-        case .variable(let name):
+        case let .variable(name):
             try container.encode(Opcode.variable)
             try container.encode(name)
-        case .binary(let op, let left, let right):
+        case let .binary(op, left, right):
             try container.encode(op)
             try container.encode(left)
             try container.encode(right)
-        case .unaryNegation(let operand):
+        case let .unaryNegation(operand):
             try container.encode(Opcode.negate)
             try container.encode(operand)
-        case .call(let name, let arguments):
+        case let .call(name, arguments):
             try container.encode(Opcode.call)
             try container.encode(name)
             try container.encode(arguments)
         }
     }
-    
+
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let tag = try container.decode(String.self)
         switch Opcode(rawValue: tag) {
         case .numberLiteral:
-            self = .numberLiteral(try container.decode(Double.self))
+            self = try .numberLiteral(container.decode(Double.self))
         case .boolean:
-            self = .boolean(try container.decode(TruthValue.self))
+            self = try .boolean(container.decode(TruthValue.self))
         case .variable:
-            self = .variable(try container.decode(String.self))
+            self = try .variable(container.decode(String.self))
         case .negate:
-            self = .unaryNegation(try container.decode(SyntaxExpression.self))
+            self = try .unaryNegation(container.decode(SyntaxExpression.self))
         case .call:
             let name = try container.decode(String.self)
             let arguments = try container.decode([SyntaxExpression].self)
@@ -114,7 +113,7 @@ extension SyntaxExpression: Codable {
             self = .binary(operator: tag, left: left, right: right)
         }
     }
-    
+
     private static let binaryOperators: Set<String> = ["+", "-", "*", "/", "%", "==", "!=", "<", ">", "<=", ">="]
 }
 
@@ -124,7 +123,7 @@ extension SwitchCase: Codable {
         try container.encode(value)
         try container.encode(body)
     }
-    
+
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         value = try container.decode(SyntaxExpression.self)
@@ -136,62 +135,62 @@ extension Statement: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
         switch self {
-        case .assignment(let name, let value):
+        case let .assignment(name, value):
             try container.encode(Opcode.declare)
             try container.encode(name)
             try container.encode(value)
-        case .mutableDeclaration(let name, let value):
+        case let .mutableDeclaration(name, value):
             try container.encode(Opcode.declareMutable)
             try container.encode(name)
             try container.encode(value)
-        case .mutation(let name, let value):
+        case let .mutation(name, value):
             try container.encode(Opcode.mutate)
             try container.encode(name)
             try container.encode(value)
-        case .print(let value):
+        case let .print(value):
             try container.encode(Opcode.print)
             try container.encode(value)
-        case .conditional(let condition, let thenBranch, let elseBranch):
+        case let .conditional(condition, thenBranch, elseBranch):
             try container.encode(Opcode.conditional)
             try container.encode(condition)
             try container.encode(thenBranch)
             try container.encode(elseBranch)
-        case .whileLoop(let condition, let body):
+        case let .whileLoop(condition, body):
             try container.encode(Opcode.whileLoop)
             try container.encode(condition)
             try container.encode(body)
-        case .switchStatement(let scrutinee, let cases, let elseBranch):
+        case let .switchStatement(scrutinee, cases, elseBranch):
             try container.encode(Opcode.switchStatement)
             try container.encode(scrutinee)
             try container.encode(cases)
             try container.encode(elseBranch)
-        case .function(let name, let parameters, let body):
+        case let .function(name, parameters, body):
             try container.encode(Opcode.function)
             try container.encode(name)
             try container.encode(parameters)
             try container.encode(body)
-        case .moduleDeclaration(let name, let functions):
+        case let .moduleDeclaration(name, functions):
             try container.encode(Opcode.moduleDeclaration)
             try container.encode(name)
             try container.encode(functions)
-        case .stateDeclaration(let name, let handlers):
+        case let .stateDeclaration(name, handlers):
             try container.encode(Opcode.stateDeclaration)
             try container.encode(name)
             try container.encode(handlers)
-        case .transition(let target):
+        case let .transition(target):
             try container.encode(Opcode.transition)
             try container.encode(target)
-        case .returnStatement(let value):
+        case let .returnStatement(value):
             try container.encode(Opcode.returnStatement)
             if let value {
                 try container.encode(value)
             }
-        case .expressionStatement(let expression):
+        case let .expressionStatement(expression):
             try container.encode(Opcode.expressionStatement)
             try container.encode(expression)
         }
     }
-    
+
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let tag = try container.decode(String.self)
@@ -209,7 +208,7 @@ extension Statement: Codable {
             let value = try container.decode(SyntaxExpression.self)
             self = .mutation(name: name, value: value)
         case .print:
-            self = .print(try container.decode(SyntaxExpression.self))
+            self = try .print(container.decode(SyntaxExpression.self))
         case .conditional:
             let condition = try container.decode(SyntaxExpression.self)
             let thenBranch = try container.decode([Statement].self)
@@ -238,12 +237,12 @@ extension Statement: Codable {
             let handlers = try container.decode([Statement].self)
             self = .stateDeclaration(name: name, handlers: handlers)
         case .transition:
-            self = .transition(target: try container.decode(String.self))
+            self = try .transition(target: container.decode(String.self))
         case .returnStatement:
             let value = container.isAtEnd ? nil : try container.decode(SyntaxExpression.self)
             self = .returnStatement(value)
         case .expressionStatement:
-            self = .expressionStatement(try container.decode(SyntaxExpression.self))
+            self = try .expressionStatement(container.decode(SyntaxExpression.self))
         default:
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unknown statement tag '\(tag)'")
         }

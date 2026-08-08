@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "BarkVM",
     products: [
-        .library(name: "BarkVM", targets: ["BarkVM"])
+        .library(name: "BarkVM", targets: ["BarkVM"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
@@ -18,12 +18,12 @@ let package = Package(
             dependencies: [
                 "BarkVM",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-            ]
+            ],
         ),
         .testTarget(
             name: "BarkVMTests",
-            dependencies: ["BarkVM"]
+            dependencies: ["BarkVM"],
         ),
     ],
-    swiftLanguageModes: [.v6]
+    swiftLanguageModes: [.v6],
 )
