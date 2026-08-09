@@ -26,21 +26,11 @@ public enum StringScanning {
         public let endIndex: Int   // index of the character just past the closing quote
     }
     
+    private static let lineEndings = ["\u{000A}", "\u{000D}",
+                                      "\u{000D}\u{000A}", "\u{2028}"]
+    
     public static func scan(_ characters: [Character], from startIndex: Int) throws -> Result {
-        var index = startIndex + 1
-        var value = ""
         
-        while index < characters.count {
-            let character = characters[index]
-            
-            switch character {
-            case "\"":
-                return Result(value: value, endIndex: index + 1)
-            default:
-                value.append(character)
-                index += 1
-            }
-        }
         
         throw StringScanningError.unterminatedString(at: startIndex)
     }
