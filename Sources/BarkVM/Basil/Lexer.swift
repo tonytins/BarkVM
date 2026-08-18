@@ -27,6 +27,26 @@ public struct Scanner {
         characters = Array(source)
     }
     
+    private func peek(offset: Int = 1) -> Character? {
+        let peekIndex = index + offset
+        guard peekIndex < characters.count else {
+            return nil
+        }
+        return characters[peekIndex]
+    }
+    
+    private func classify(_ word: String) -> TokenKind {
+        guard word != "_" else {
+            return .symbol(.underscore)
+        }
+        
+        guard let keyword = Keyword(rawValue: word) else {
+            return .identifier(word)
+        }
+        
+        return .keyword(keyword)
+    }
+    
     private mutating func advance() {
         index += 1
     }
