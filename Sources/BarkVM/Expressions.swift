@@ -13,6 +13,7 @@ public enum Expression: Sendable, Equatable {
     case numberLiteral(Double)
     case stringLiteral(String)
     case boolLiteral(Bool)
+    case trileanLiteral(Trilean)
     case noneLiteral
     case identifier(String)
     indirect case numberAcess(base: Expression, member: String)
