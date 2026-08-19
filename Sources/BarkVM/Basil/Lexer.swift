@@ -65,7 +65,7 @@ public struct Scanner {
             }
             
             if current == "#" {
-                
+                skipWhiteSpaceAndComments()
             }
         }
     }
